@@ -3,11 +3,11 @@
 import cv2
 import os
 
-
-# Ejercicio 1
-# Crea una función que pasándole la ruta de una imagen, la rote 180 grados y genere una
-# nueva imagen.
-
+###########################################################################################
+    # Ejercicio 1
+    # Crea una función que pasándole la ruta de una imagen, la rote 180 grados y genere una
+    # nueva imagen.
+###########################################################################################
 def rotateImage(ruta):
     # Cargar la imagen en memoria
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
@@ -37,10 +37,11 @@ def rotateImage(ruta):
     # Cerrar todas las ventanas de OpenCV
     cv2.destroyAllWindows()
 
-# Ejercicio 2
-# Crea una función que pasándole la ruta de una imagen, genere una nueva imagen a partir
-# de ella con los colores invertidos.
-
+###########################################################################################
+    # Ejercicio 2
+    # Crea una función que pasándole la ruta de una imagen, genere una nueva imagen a partir
+    # de ella con los colores invertidos.
+###########################################################################################
 def negative_color(ruta):
     # Cargar la imagen en memoria
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
@@ -67,10 +68,11 @@ def negative_color(ruta):
     # Cerrar todas las ventanas de OpenCV
     cv2.destroyAllWindows()
 
-# Ejercicio 3
-# Crea una función que pasándole la ruta de una imagen, genere una nueva imagen a partir
-# ella pero en escala de grises.
-
+###########################################################################################
+    # Ejercicio 3
+    # Crea una función que pasándole la ruta de una imagen, genere una nueva imagen a partir
+    # ella pero en escala de grises.
+###########################################################################################
 def gray_scale_color(ruta):
     # Cargar la imagen en memoria
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
@@ -97,10 +99,11 @@ def gray_scale_color(ruta):
     # Cerrar todas las ventanas de OpenCV
     cv2.destroyAllWindows()
 
-# Ejercicio 4
-# Crea una función que pasándole la ruta de una imagen, marque un cuadrado a partir de
-# dos coordenadas.
-
+###########################################################################################
+    # Ejercicio 4
+    # Crea una función que pasándole la ruta de una imagen, marque un cuadrado a partir de
+    # dos coordenadas.
+###########################################################################################
 def box_face_by_cordinates(ruta,coordX,coordY,color):
     # Cargar la imagen en memoria
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
@@ -116,7 +119,7 @@ def box_face_by_cordinates(ruta,coordX,coordY,color):
     cv2.imwrite(nueva_imagen, box_face)
 
     # Mostrar imagen
-    cv2.imshow('Imagen en escala de grises', imagen_resized_box)
+    cv2.imshow('Imagen con cuadrado', imagen_resized_box)
 
     # Esperar hasta que el usuario presione una tecla
     cv2.waitKey(0)  # Espera hasta que se presione cualquier tecla
@@ -124,3 +127,34 @@ def box_face_by_cordinates(ruta,coordX,coordY,color):
     # Cerrar todas las ventanas de OpenCV
     cv2.destroyAllWindows()
 
+###########################################################################################
+    # Ejercicio 5
+    # Crea una función que pasándole la ruta de una imagen, invierta los colores de un cuadrado
+    # a partir de dos coordenadas, pasadas por parámetro.
+###########################################################################################
+
+def box_color_inverter(ruta,coordX,coordY):
+    # Cargar la imagen en memoria
+    imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
+
+    x1, x2 = coordX
+    y1, y2 = coordY
+    box = imagen[y1:y2, x1:x2]
+    # Invertir los colores del box
+    box_invertida = cv2.bitwise_not(box)
+    # Reemplazar la ROI original con la invertida
+    imagen[y1:y2, x1:x2] = box_invertida
+
+    imagen_resized = cv2.resize(imagen, (800, 600))
+
+    # Usar os.path.splitext() para separar el nombre y la extensión
+    nombre, extension = os.path.splitext(ruta)
+    # Crear la nueva ruta con el nombre modificado y la misma extensión
+    nueva_imagen = nombre + '_invcua' + extension
+    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
+    cv2.imwrite(nueva_imagen, imagen)
+
+    # Mostrar la imagen resultante
+    cv2.imshow("Imagen con colores invertidos", imagen_resized)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
