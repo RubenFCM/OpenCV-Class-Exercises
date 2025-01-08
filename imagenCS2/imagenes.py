@@ -2,6 +2,8 @@
 # Instalar cv2  pip3 install opencv-python
 import cv2
 import os
+import base64
+import webbrowser
 
 ###########################################################################################
     # Ejercicio 1
@@ -200,11 +202,11 @@ def mirror_image(ruta):
 
     mirror_image = cv2.flip(imagen, 1)
 
-    imagen_resized = cv2.resize(imagen, (400, 300))
-    imagen_resized_mirror = cv2.resize(mirror_image, (400, 300))
+    #imagen_resized = cv2.resize(imagen, (400, 300))
+    #imagen_resized_mirror = cv2.resize(mirror_image, (400, 300))
 
-    cv2.imshow('Imagen Original', imagen_resized)
-    cv2.imshow('Imagen Espejo', imagen_resized_mirror)
+    #cv2.imshow('Imagen Original', imagen_resized)
+    #cv2.imshow('Imagen Espejo', imagen_resized_mirror)
 
     # Usar os.path.splitext() para separar el nombre y la extensión
     nombre, extension = os.path.splitext(ruta)
@@ -213,8 +215,9 @@ def mirror_image(ruta):
     # La guardamos en memoria en un fichero distinto y devolvemos la ruta
     cv2.imwrite(nueva_imagen, mirror_image)
 
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
+    return mirror_image
 
 ###########################################################################################
 # Ejercicio 8
@@ -230,7 +233,7 @@ def horizontal_half_mirror_image(ruta):
 
     imagen[:, ancho // 2:] = cv2.flip(imagen[:, :ancho // 2], 1)
 
-    cv2.imshow('Imagen mitad espejo', imagen)
+    #cv2.imshow('Imagen mitad espejo', imagen)
 
     # Usar os.path.splitext() para separar el nombre y la extensión
     nombre, extension = os.path.splitext(ruta)
@@ -239,8 +242,9 @@ def horizontal_half_mirror_image(ruta):
     # La guardamos en memoria en un fichero distinto y devolvemos la ruta
     cv2.imwrite(nueva_imagen, imagen)
 
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
+    return imagen
 
 ###########################################################################################
 # Ejercicio 9
@@ -277,4 +281,89 @@ def vertical_half_mirror_image(ruta):
 ###########################################################################################
 
 def generate_html(ruta):
-    return
+
+    image_0 = cv2.imread(ruta,cv2.IMREAD_UNCHANGED)
+    image_1 = mirror_image(ruta)
+    image_2 = horizontal_half_mirror_image(ruta)
+    image_3 = vertical_half_mirror_image(ruta)
+
+    # Convertir imágenes a base64 para incrustarlas en el HTML
+    img_0_base64 = image_to_base64(image_0)
+    img_1_base64 = image_to_base64(image_1)
+    img_2_base64 = image_to_base64(image_2)
+    img_3_base64 = image_to_base64(image_3)
+
+    html = f'''
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tabla de Imágenes Generadas</title>
+        <style>
+            table {{
+                width: 50%;
+                margin: auto;
+            }}
+            th, td {{
+                padding: 10px;
+                text-align: center;
+            }}
+            img {{
+                max-width: 300px;
+                max-height: 300px;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Tabla de Imágenes Generadas</h1>
+        <table>
+            <tr>
+                <td>
+                    <p>Imagen Original</p>
+                    <img src="{img_0_base64}" alt="Imagen Original">
+                </td>
+                <td>
+                    <p>Imagen Espejo</p>
+                    <img src="{img_1_base64}" alt="Imagen Espejo">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Espejo Mitad Horizontal</p>
+                    <img src="{img_2_base64}" alt="Espejo Mitad Horizontal">
+                </td>
+                <td>
+                    <p>Espejo Mitad Vertical</p>
+                    <img src="{img_3_base64}" alt="Espejo Mitad Vertical">
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    '''
+    return html
+
+def image_to_base64(image):
+
+    _, buffer = cv2.imencode('.png', image)
+    base64_image = base64.b64encode(buffer).decode('utf-8')
+    return f"data:image/png;base64,{base64_image}"
+def save_html(html, filename="index.html"):
+    # Obtener la ruta del directorio actual
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construir la ruta hacia la carpeta "html" un nivel arriba
+    parent_dir = os.path.dirname(current_dir)
+    html_dir = os.path.join(parent_dir, "html")
+
+    # Asegurarse de que la carpeta "html" exista
+    if not os.path.exists(html_dir):
+        os.makedirs(html_dir)
+
+    # Ruta completa del archivo
+    filepath = os.path.join(html_dir, filename)
+
+    # Guardar el HTML en un archivo
+    with open(filepath, "w", encoding="utf-8") as file:
+        file.write(html)
