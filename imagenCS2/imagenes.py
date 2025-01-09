@@ -3,10 +3,9 @@
 import cv2
 import os
 import base64
-import webbrowser
 
 
-# Función para guardar una imagen en img
+# Función para guardar una imagen en la carpeta img
 def save_image(ruta,text,img):
     # Usar os.path.splitext() para separar el nombre y la extensión
     nombre, extension = os.path.splitext(ruta)
@@ -347,20 +346,21 @@ def box_and_text_image(ruta,coordX,coordY,box_color,text):
 # Crea una función que pasándole la ruta de una imagen, emborrone una zona determinada
 ###########################################################################################
 
-def emb_image(ruta,coordX,coordY):
+def box_blur_image(ruta,coordX,coordY):
 
-    imagen_gray = gray_scale_color(ruta)
-    x1, x2 = coordX
-    y1, y2 = coordY
-    box = imagen_gray[y1:y2, x1:x2]
-    # Verificar las dimensiones de la imagen
-    height, width = box.shape[:2]
-    print(f"Dimensiones de la imagen: {width}x{height}")
+    # Cargar la imagen en memoria
+    imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
 
-    #emb_image = cv2.medianBlur(box,33)
-    # Invertir los colores del box
-    #box_invertida = cv2.bitwise_not(box)
-    # Reemplazar la ROI original con la invertida
-    #imagen_gray[y1:y2, x1:x2] = emb_image
+    # Extraer las coordenadas
+    x1, y1 = coordX
+    x2, y2 = coordY
 
-    save_image(ruta,'_emb',imagen_gray)
+    # Extraer el ROI (box)
+    box = imagen[y1:y2, x1:x2]
+    # Aplicar desenfoque al box
+    box_blur = cv2.GaussianBlur(box, (99, 99), 0)
+    # Reemplazar la ROI original con la desenfocada
+    imagen[y1:y2, x1:x2] = box_blur
+
+    # Guardar la imagen con el sufijo "_blurred"
+    save_image(ruta, '_blurred', imagen)
