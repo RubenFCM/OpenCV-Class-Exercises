@@ -5,6 +5,16 @@ import os
 import base64
 import webbrowser
 
+
+# Función para guardar una imagen en img
+def save_image(ruta,text,img):
+    # Usar os.path.splitext() para separar el nombre y la extensión
+    nombre, extension = os.path.splitext(ruta)
+    # Crear la nueva ruta con el nombre modificado y la misma extensión
+    nueva_imagen = nombre + text + extension
+    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
+    cv2.imwrite(nueva_imagen, img)
+
 ###########################################################################################
     # Ejercicio 1
     # Crea una función que pasándole la ruta de una imagen, la rote 180 grados y genere una
@@ -18,24 +28,13 @@ def rotateImage(ruta):
     imagen_resized = cv2.resize(imagen, (400, 300))
     imagen_resized_rotate = cv2.resize(imagen_rotate, (400, 300))
 
-    # Generamos un nombre para la nueva imagen
-    #nueva_imagen = (ruta.split(".")[1] + "_rotated." + ruta.split(".")[2])
-
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_rotated' + extension
-
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, imagen_rotate)
+    save_image(ruta,'_rotated',imagen_rotate)
 
     # Mostrar imagenes
     cv2.imshow('Imagen Original', imagen_resized)
     cv2.imshow('Imagen Rotada', imagen_resized_rotate)
-
     # Esperar hasta que el usuario presione una tecla
     cv2.waitKey(0)  # Espera hasta que se presione cualquier tecla
-
     # Cerrar todas las ventanas de OpenCV
     cv2.destroyAllWindows()
 
@@ -52,21 +51,13 @@ def negative_color(ruta):
     imagen_resized = cv2.resize(imagen, (400, 300))
     imagen_resized_negative = cv2.resize(imagen_negative, (400, 300))
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_negative' + extension
-
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, imagen_negative)
+    save_image(ruta,'_negative',imagen_negative)
 
     # Mostrar imagenes
     cv2.imshow('Imagen Original', imagen_resized)
     cv2.imshow('Imagen Color negativo', imagen_resized_negative)
-
     # Esperar hasta que el usuario presione una tecla
     cv2.waitKey(0)  # Espera hasta que se presione cualquier tecla
-
     # Cerrar todas las ventanas de OpenCV
     cv2.destroyAllWindows()
 
@@ -80,26 +71,19 @@ def gray_scale_color(ruta):
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
     imagen_gray = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
     # Redimensionar las imágenes a un tamaño más pequeño
-    imagen_resized = cv2.resize(imagen, (400, 300))
-    imagen_resized_gray = cv2.resize(imagen_gray, (400, 300))
+    #imagen_resized = cv2.resize(imagen, (400, 300))
+    #imagen_resized_gray = cv2.resize(imagen_gray, (400, 300))
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_gray' + extension
-
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, imagen_gray)
+    save_image(ruta,'_gray',imagen_gray)
 
     # Mostrar imagenes
-    cv2.imshow('Imagen Original', imagen_resized)
-    cv2.imshow('Imagen en escala de grises', imagen_resized_gray)
-
+    #cv2.imshow('Imagen Original', imagen_resized)
+    #cv2.imshow('Imagen en escala de grises', imagen_resized_gray)
     # Esperar hasta que el usuario presione una tecla
-    cv2.waitKey(0)  # Espera hasta que se presione cualquier tecla
-
+    #cv2.waitKey(0)  # Espera hasta que se presione cualquier tecla
     # Cerrar todas las ventanas de OpenCV
-    cv2.destroyAllWindows()
+    #cv2.destroyAllWindows()
+    return  imagen_gray
 
 ###########################################################################################
     # Ejercicio 4
@@ -111,23 +95,18 @@ def box_face_by_cordinates(ruta,coordX,coordY,color):
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
     box_face = cv2.rectangle(imagen,coordX,coordY,color,5)
 
-    imagen_resized_box = cv2.resize(box_face, (800, 600))
+    #imagen_resized_box = cv2.resize(box_face, (800, 600))
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_box' + extension
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, box_face)
+    save_image(ruta,'_box',box_face)
 
     # Mostrar imagen
-    cv2.imshow('Imagen con cuadrado', imagen_resized_box)
-
+    #cv2.imshow('Imagen con cuadrado', imagen_resized_box)
     # Esperar hasta que el usuario presione una tecla
-    cv2.waitKey(0)  # Espera hasta que se presione cualquier tecla
-
+    #cv2.waitKey(0)  # Espera hasta que se presione cualquier tecla
     # Cerrar todas las ventanas de OpenCV
-    cv2.destroyAllWindows()
+    #cv2.destroyAllWindows()
+
+    return box_face
 
 ###########################################################################################
     # Ejercicio 5
@@ -149,12 +128,7 @@ def box_color_inverter(ruta,coordX,coordY):
 
     imagen_resized = cv2.resize(imagen, (800, 600))
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_invcua' + extension
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, imagen)
+    save_image(ruta,'_invcua',imagen)
 
     # Mostrar la imagen resultante
     cv2.imshow("Imagen con colores invertidos", imagen_resized)
@@ -184,13 +158,7 @@ def resize_image(ruta):
     # Redimensionar la imagen para que sus dimensiones sean pares
     image_resized = imagen[0:alto, 0:ancho]
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_resized' + extension
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, image_resized)
-
+    save_image(ruta,'_resized',image_resized)
 
 ###########################################################################################
 # Ejercicio 7
@@ -208,12 +176,7 @@ def mirror_image(ruta):
     #cv2.imshow('Imagen Original', imagen_resized)
     #cv2.imshow('Imagen Espejo', imagen_resized_mirror)
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_mirror' + extension
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, mirror_image)
+    save_image(ruta,'_mirror',mirror_image)
 
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
@@ -235,12 +198,7 @@ def horizontal_half_mirror_image(ruta):
 
     #cv2.imshow('Imagen mitad espejo', imagen)
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_halfmirrorH' + extension
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, imagen)
+    save_image(ruta,'_halfmirrorH',imagen)
 
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
@@ -262,12 +220,7 @@ def vertical_half_mirror_image(ruta):
 
     #cv2.imshow('Imagen mitad espejo', imagen)
 
-    # Usar os.path.splitext() para separar el nombre y la extensión
-    nombre, extension = os.path.splitext(ruta)
-    # Crear la nueva ruta con el nombre modificado y la misma extensión
-    nueva_imagen = nombre + '_halfmirrorV' + extension
-    # La guardamos en memoria en un fichero distinto y devolvemos la ruta
-    cv2.imwrite(nueva_imagen, imagen)
+    save_image(ruta,'_halfmirrorV',imagen)
 
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
@@ -343,12 +296,14 @@ def generate_html(ruta):
     </html>
     '''
     return html
-
+# Función para pasar una imagen a base64
 def image_to_base64(image):
 
     _, buffer = cv2.imencode('.png', image)
     base64_image = base64.b64encode(buffer).decode('utf-8')
     return f"data:image/png;base64,{base64_image}"
+
+# Función para guargar un html generado en la carpeta html
 def save_html(html, filename="index.html"):
     # Obtener la ruta del directorio actual
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -367,3 +322,45 @@ def save_html(html, filename="index.html"):
     # Guardar el HTML en un archivo
     with open(filepath, "w", encoding="utf-8") as file:
         file.write(html)
+
+###########################################################################################
+# Ejercicio 11
+# Crea una función que pasándole la ruta de una imagen, además de marcar un cuadrado a
+# partir de dos coordenadas, como se hizo en el ejercicio 4, añada un texto en la parte inferior
+# del cuadrado.
+###########################################################################################
+
+def box_and_text_image(ruta,coordX,coordY,box_color,text):
+    imagen = box_face_by_cordinates(ruta,coordX,coordY,box_color)
+
+    imagen_txt = cv2.putText(imagen,text,(coordX[0]+10,coordY[1]-10),cv2.FONT_HERSHEY_SIMPLEX,2,box_color,2)
+
+    #cv2.imshow('Imagen con cuadrado y texto.', imagen_txt)
+
+    save_image(ruta,'_box&text',imagen_txt)
+
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
+
+###########################################################################################
+# Ejercicio 12
+# Crea una función que pasándole la ruta de una imagen, emborrone una zona determinada
+###########################################################################################
+
+def emb_image(ruta,coordX,coordY):
+
+    imagen_gray = gray_scale_color(ruta)
+    x1, x2 = coordX
+    y1, y2 = coordY
+    box = imagen_gray[y1:y2, x1:x2]
+    # Verificar las dimensiones de la imagen
+    height, width = box.shape[:2]
+    print(f"Dimensiones de la imagen: {width}x{height}")
+
+    #emb_image = cv2.medianBlur(box,33)
+    # Invertir los colores del box
+    #box_invertida = cv2.bitwise_not(box)
+    # Reemplazar la ROI original con la invertida
+    #imagen_gray[y1:y2, x1:x2] = emb_image
+
+    save_image(ruta,'_emb',imagen_gray)
