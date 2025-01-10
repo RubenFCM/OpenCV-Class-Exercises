@@ -232,7 +232,7 @@ def vertical_half_mirror_image(ruta):
 #  muestre la imagen original y las generadas en las tres funciones anteriores en una tabla
 ###########################################################################################
 
-def generate_html(ruta):
+def generate_html(ruta, filename):
 
     image_0 = cv2.imread(ruta,cv2.IMREAD_UNCHANGED)
     image_1 = mirror_image(ruta)
@@ -294,6 +294,7 @@ def generate_html(ruta):
     </body>
     </html>
     '''
+    save_html(html,filename)
     return html
 # Función para pasar una imagen a base64
 def image_to_base64(image):
@@ -303,7 +304,7 @@ def image_to_base64(image):
     return f"data:image/png;base64,{base64_image}"
 
 # Función para guargar un html generado en la carpeta html
-def save_html(html, filename="index.html"):
+def save_html(html, filename):
     # Obtener la ruta del directorio actual
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -364,3 +365,43 @@ def box_blur_image(ruta,coordX,coordY):
 
     # Guardar la imagen con el sufijo "_blurred"
     save_image(ruta, '_blurred', imagen)
+
+###########################################################################################
+# Ejercicio 13
+# Crea una función que pasándole la ruta de una imagen, detecte y marque las
+# caras de dicha imagen utilizando la funcionaliad de CV2. Esta librería posibilita la detección de
+# objetos mediante aprendizaje automático en cascada. Podemos entrenar nuestros propios
+# clasificadores, pero para este ejercicio utilizaremos un clasificador preentrenado que puedes
+# encontrar en el gitHub de OpenCV (opencv/data/haarcascades/)
+###########################################################################################
+
+def face_detector_img(ruta_img,blur = False):
+    cascade_path = "haarcascade_frontalface_default/haarcascade_frontalface_default.xml"
+    # Cargar el clasificador Haar para detección de rostros.
+    face_cascade = cv2.CascadeClassifier(cascade_path)
+    # Leer la imagen
+    imagen = cv2.imread(ruta_img)
+    # Convertir la imagen a escala de grises
+    imagen_gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
+
+     # Detectar caras
+     # scaleFactor=1.1: Reduce la imagen en un 10% en cada iteración para detectar rostros de diferentes tamaños.
+     # minNeighbors=5: Define cuántos rectángulos adyacentes deben agruparse para considerar que se ha detectado una cara.
+     # minSize=(30, 30): Tamaño mínimo de las caras a detectar.
+    caras = face_cascade.detectMultiScale(imagen_gris, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+    # Dibujar rectángulos alrededor de las caras detectadas
+    for (x, y, w, h) in caras:
+        print(f'x ={x}, y={y}, w={w}, h={h}')
+        cv2.rectangle(imagen, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+    if (blur):
+        # Extraer región de la cara
+        rostro = imagen[y:y + h, x:x + w]
+        # Aplicar un desenfoque Gaussian
+        rostro_blur = cv2.GaussianBlur(rostro, (99, 99), 30)
+        # Reemplazar la región original con la desenfocada
+        imagen[y:y + h, x:x + w] = rostro_blur
+
+    # Guardar el resultado
+    save_image(ruta_img,'_face',imagen)
