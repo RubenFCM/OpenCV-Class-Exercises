@@ -1,5 +1,5 @@
 from imagenes import *
-
+from imagen2 import *
 
 #rotateImage(r'img\f1.jpg')
 #negative_color(r'img\f1.jpg')
@@ -14,3 +14,7 @@ from imagenes import *
 #box_and_text_image(r'img\f2.jpg',(1500,250),(2000,800),(0,0,255),'Ronnie')
 #box_blur_image(r'img\f2.jpg',(1500,250),(2000,800))
 #face_detector_img(r'img\f2.jpg',True)
+
+## Ejercicios ampliación 2
+
+box_color_inverter_v2(r'img\p1.jpg',(1500,3500),(3100,5500),True)
