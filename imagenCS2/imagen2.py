@@ -26,24 +26,24 @@ def save_image_v2(ruta, text, img):
 # imagen.
 ###########################################################################################
 
-def box_color_inverter_v2(ruta, coordX, coordY, in_box):
+def box_color_inverter_v2(ruta, coord1, coord2, in_box):
     # Cargar la imagen en memoria
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
 
-    x1, x2 = coordX
-    y1, y2 = coordY
+    x1, y1 = coord1
+    x2, y2 = coord2
     if (in_box):
-        box = imagen[y1:y2, x1:x2]
+        box = imagen[x2:y2, x1:y1]
         # Invertir los colores de la imagen completa
         imagen = cv2.bitwise_not(imagen)
         # Reemplazar la zona del box en la imagen completa
-        imagen[y1:y2, x1:x2] = box
+        imagen[x2:y2, x1:y1] = box
     else:
-        box = imagen[y1:y2, x1:x2]
+        box = imagen[x2:y2, x1:y1]
         # Invertir los colores del box
         box_invertida = cv2.bitwise_not(box)
         # Reemplazar la ROI original con la invertida
-        imagen[y1:y2, x1:x2] = box_invertida
+        imagen[x2:y2, x1:y1] = box_invertida
 
     save_image_v2(ruta, '_invcua_V2', imagen)
 
@@ -54,20 +54,90 @@ def box_color_inverter_v2(ruta, coordX, coordY, in_box):
 # tonos de gris. Añadirlo como funcionalidad extra.
 ###########################################################################################
 
-def gray_outside_frame(ruta, coordX, coordY):
+def gray_outside_frame(ruta, coord1, coord2):
     # Cargar la imagen en memoria
     img = cv2.imread(ruta)
     # Elegir con las coordenadas la parte de la imagen que queremos a color
-    box = img[coordX[1]:coordY[1], coordX[0]:coordY[0]]
+    box = img[coord1[1]:coord2[1], coord1[0]:coord2[0]]
     # Convertir la imagen a escala de grises
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # Convertir la imagen en escala de grises, pero con 3 canales
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     # Reemplazar en la imagen en escala de grises la parte que nos interesa por la guardada antes a color
-    img[coordX[1]:coordY[1], coordX[0]:coordY[0]] = box
+    img[coord1[1]:coord2[1], coord1[0]:coord2[0]] = box
     # Mostrar cuadrado en las coordenadas
-    cv2.rectangle(img, coordX, coordY, (0, 0, 255), 5)
+    cv2.rectangle(img, coord1, coord2, (0, 0, 255), 5)
 
     save_image_v2(ruta, '_gray_outside', img)
+
+    return img
+
+
+###########################################################################################
+# Ejercicio 3
+# Como variante del ejercicio 11, se propone que la imagen generada contenga solo el
+# marco seleccionado, incluyendo un perímetro en tonos de grises, además la etiqueta podrá
+# estar vacía.
+# Como variante del ejercicio 11 se propone que el texto sea opcional y se ajuste al tamaño
+# del cuadro.
+###########################################################################################
+def paint_box_text(ruta, coord1, coord2, text, gray, cut):
+    # Cargar imagen
+    img = cv2.imread(ruta)
+    # Elegir con las coordenadas la parte de la imagen que queremos a color
+
+    if gray:
+        img = gray_outside_frame(ruta, coord1, coord2)
+
+    # Mostrar cuadrado en las coordenadas
+    cv2.rectangle(img, coord1, coord2, (0, 0, 255), 5)
+
+    if text != '':
+        img = add_text(img, coord1, coord2, text)
+
+    if cut:
+        img = gray_outside_frame_img(img, coord1, coord2)
+        img = img[coord1[1] - 100:coord2[1] + 100, coord1[0] - 100:coord2[0] + 100]
+
+    save_image_v2(ruta, '_Text_Gray_Outside', img)
+
+    return img
+
+
+# Función para añadir texto a la imagen
+def add_text(img, coord1, coord2, text):
+    # Dimensiones del rectángulo
+    box_width = coord2[0] - coord1[0]
+    box_height = coord2[1] - coord1[1]
+    # Tamaño inicial y cálculo de escala
+    font_scale = 1  # Escala inicial
+    thickness = 2
+    text_size, _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, font_scale, thickness)
+    # Calcular la escala necesaria para ajustar el texto al área disponible
+    scale_width = box_width / text_size[0]
+    scale_height = box_height / text_size[1]
+    font_scale = min(scale_width, scale_height)  # Multiplicador de margen
+
+    # Calcular la posición del texto para centrarlo
+    text_x = coord1[0]
+    text_y = coord2[1]
+
+    img = cv2.putText(img, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 255), 2)
+
+    return img
+
+
+# Función para pasar a escala de grises la parte de la imagen fuera de las coordenadas
+def gray_outside_frame_img(img, coord1, coord2):
+    # Elegir con las coordenadas la parte de la imagen que queremos a color
+    box = img[coord1[1]:coord2[1], coord1[0]:coord2[0]]
+    # Convertir la imagen a escala de grises
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Convertir la imagen en escala de grises, pero con 3 canales
+    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    # Reemplazar en la imagen en escala de grises la parte que nos interesa por la guardada antes a color
+    img[coord1[1]:coord2[1], coord1[0]:coord2[0]] = box
+    # Mostrar cuadrado en las coordenadas
+    cv2.rectangle(img, coord1, coord2, (0, 0, 255), 5)
 
     return img
