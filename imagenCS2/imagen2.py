@@ -57,14 +57,17 @@ def box_color_inverter_v2(ruta, coordX, coordY, in_box):
 def gray_outside_frame(ruta, coordX, coordY):
     # Cargar la imagen en memoria
     img = cv2.imread(ruta)
-    box = img[coordX[1]:coordX[0]-700, coordY[1]+700:coordY[0]]
+    # Elegir con las coordenadas la parte de la imagen que queremos a color
+    box = img[coordX[1]:coordY[1], coordX[0]:coordY[0]]
     # Convertir la imagen a escala de grises
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray_img_colored = cv2.cvtColor(gray_img, cv2.COLOR_GRAY2BGR)
-    # Crear una copia de la imagen en escala de grises, pero con 3 canales
-    gray_img_colored[coordX[1]:coordX[0]-700, coordY[1]+700:coordY[0]] = box
-    cv2.rectangle(gray_img_colored, coordX, coordY, (0, 0, 255), 5)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Convertir la imagen en escala de grises, pero con 3 canales
+    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    # Reemplazar en la imagen en escala de grises la parte que nos interesa por la guardada antes a color
+    img[coordX[1]:coordY[1], coordX[0]:coordY[0]] = box
+    # Mostrar cuadrado en las coordenadas
+    cv2.rectangle(img, coordX, coordY, (0, 0, 255), 5)
 
-    save_image_v2(ruta, '_gray_outside', gray_img_colored)
+    save_image_v2(ruta, '_gray_outside', img)
 
-    return gray_img_colored
+    return img

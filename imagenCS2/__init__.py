@@ -18,4 +18,4 @@ from imagen2 import *
 ## Ejercicios ampliación 2
 
 #box_color_inverter_v2(r'img\p1.jpg',(1500,3500),(3100,5500),True)
-gray_outside_frame(r'img\f2.jpg',(1500,250),(2000,800))
+gray_outside_frame(r'img\m2.jpg',(1500,250),(2000,800))
