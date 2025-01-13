@@ -104,7 +104,7 @@ def paint_box_text(ruta, coord1, coord2, text, gray, cut):
     return img
 
 
-# Función para añadir texto a la imagen
+# Función para añadir texto a una imagen
 def add_text(img, coord1, coord2, text):
     # Dimensiones del rectángulo
     box_width = coord2[0] - coord1[0]
@@ -141,3 +141,26 @@ def gray_outside_frame_img(img, coord1, coord2):
     cv2.rectangle(img, coord1, coord2, (0, 0, 255), 5)
 
     return img
+
+###########################################################################################
+# Ejercicio 4
+# 14b) Revisa el resto de clasificadores preentrenados de Haar en la librería OpenCV para detectar
+# otros elementos. Por ejemplo la boca. Investiga como podrías entrenar tu propio modelo.
+###########################################################################################
+
+def detect_mouth(ruta_img):
+    cascade_path = "haarcascade/haarcascade_mcs_mouth.xml"
+    # Cargar el clasificador Haar para detección de rostros.
+    mouth_cascade = cv2.CascadeClassifier(cascade_path)
+    # Cargar imagen
+    imagen = cv2.imread(ruta_img)
+    # Convertir la imagen a escala de grises
+    imagen_gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
+
+    mouth = mouth_cascade.detectMultiScale(imagen_gris, scaleFactor=1.1, minNeighbors = 1, minSize=(150, 150))
+
+    for (x, y, w, h) in mouth:
+        print(f'x ={x}, y={y}, w={w}, h={h}')
+        cv2.rectangle(imagen, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    # Guardar el resultado
+    save_image_v2(ruta_img, '_mouth', imagen)

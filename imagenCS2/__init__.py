@@ -13,11 +13,12 @@ from imagen2 import *
 # generate_html(r'img\m2.jpg','index2.html')
 # box_and_text_image(r'img\f2.jpg',(1500,250),(2000,800),(0,0,255),'Ronnie')
 # box_blur_image(r'img\f2.jpg',(1500,250),(2000,800))
-#face_detector_img(r'img\f2.jpg',True)
+# face_detector_img(r'img\g1.jpg',True)
 
 # Ejercicios ampliación 2
 
 # box_color_inverter_v2(r'img\p1.jpg',(1500,3500),(3100,5500),False)
 # gray_outside_frame(r'img\f2.jpg', (1500, 250), (2000, 800))
-paint_box_text(r'img\f2.jpg',(1500, 250), (2000, 800),'Paquiña es felice',True,False)
+# paint_box_text(r'img\f2.jpg',(1500, 250), (2000, 800),'Paquiña es felice',True,False)
+detect_mouth(r'img\f2.jpg')
 

@@ -389,7 +389,7 @@ def box_blur_image(ruta, coord1, coord2):
 ###########################################################################################
 
 def face_detector_img(ruta_img, blur=False):
-    cascade_path = "haarcascade_frontalface_default/haarcascade_frontalface_default.xml"
+    cascade_path = "haarcascade/haarcascade_frontalface_default.xml"
     # Cargar el clasificador Haar para detección de rostros.
     face_cascade = cv2.CascadeClassifier(cascade_path)
     # Leer la imagen
@@ -401,7 +401,7 @@ def face_detector_img(ruta_img, blur=False):
     # scaleFactor=1.1: Reduce la imagen en un 10% en cada iteración para detectar rostros de diferentes tamaños.
     # minNeighbors=5: Define cuántos rectángulos adyacentes deben agruparse para considerar que se ha detectado una cara.
     # minSize=(30, 30): Tamaño mínimo de las caras a detectar.
-    caras = face_cascade.detectMultiScale(imagen_gris, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    caras = face_cascade.detectMultiScale(imagen_gris, scaleFactor=1.1, minNeighbors=5, minSize=(100, 100))
 
     # Dibujar rectángulos alrededor de las caras detectadas
     for (x, y, w, h) in caras:
