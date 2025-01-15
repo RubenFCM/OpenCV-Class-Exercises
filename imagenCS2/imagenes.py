@@ -195,7 +195,7 @@ def mirror_image(ruta):
 # copie en la derecha.
 ###########################################################################################
 
-def horizontal_half_mirror_image(ruta):
+def vertical_half_mirror_image(ruta):
     # Cargar la imagen
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
     # Obtener las dimensiones de la imagen original
@@ -205,7 +205,7 @@ def horizontal_half_mirror_image(ruta):
 
     # cv2.imshow('Imagen mitad espejo', imagen)
 
-    save_image(ruta, '_halfmirrorH', imagen)
+    save_image(ruta, '_halfmirrorV', imagen)
 
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
@@ -218,7 +218,7 @@ def horizontal_half_mirror_image(ruta):
 #  en la inferior, efecto espejo por la horizontal.
 ###########################################################################################
 
-def vertical_half_mirror_image(ruta):
+def horizontal_half_mirror_image(ruta):
     # Cargar la imagen
     imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
     # Obtener las dimensiones de la imagen original
@@ -228,7 +228,7 @@ def vertical_half_mirror_image(ruta):
 
     # cv2.imshow('Imagen mitad espejo', imagen)
 
-    save_image(ruta, '_halfmirrorV', imagen)
+    save_image(ruta, '_halfmirrorH', imagen)
 
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
