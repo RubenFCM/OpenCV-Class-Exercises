@@ -157,7 +157,7 @@ def detect_mouth(ruta_img):
     # Convertir la imagen a escala de grises
     imagen_gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
 
-    mouth = mouth_cascade.detectMultiScale(imagen_gris, scaleFactor=1.1, minNeighbors = 1, minSize=(150, 150))
+    mouth = mouth_cascade.detectMultiScale(imagen_gris, scaleFactor=1.1, minNeighbors=1, minSize=(150, 150))
 
     for (x, y, w, h) in mouth:
         print(f'x ={x}, y={y}, w={w}, h={h}')

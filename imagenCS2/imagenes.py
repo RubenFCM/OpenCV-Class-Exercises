@@ -418,3 +418,64 @@ def face_detector_img(ruta_img, blur=False):
 
     # Guardar el resultado
     save_image(ruta_img, '_face', imagen)
+
+
+###########################################################################################
+# Ejercicio 14
+# Crea una función que realice capturas con la webcam y marque cara y ojos del rostro.
+###########################################################################################
+
+def webcam_face_eyes():
+    face_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_frontalface_default.xml')
+    if face_cascade.empty(): raise Exception("¿Está seguro que es la ruta correcta?")
+    eye_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_eye.xml')
+    if eye_cascade.empty(): raise Exception("¿Está seguro que es la ruta correcta?")
+    video = cv2.VideoCapture(0)
+    while video.isOpened():
+        ret, frame = video.read()
+        if frame is not None:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                roi_gray = gray[y:y + h, x:x + w]
+                roi_color = frame[y:y + h, x:x + w]
+                eyes = eye_cascade.detectMultiScale(roi_gray)
+                for (ex, ey, ew, eh) in eyes:
+                    cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+            cv2.imshow('Video', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    video.release()
+    cv2.destroyAllWindows()
+
+
+###########################################################################################
+# Ejercicio 15
+# Crea una función que realice una captura con la webcam, como en el ejercicio anterior,
+# pero que esta vez, en lugar de marcarla, la emborrone.
+###########################################################################################
+
+def webcam_blur_face():
+    face_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_frontalface_default.xml')
+    if face_cascade.empty(): raise Exception("¿Está seguro que es la ruta correcta?")
+    eye_cascade = cv2.CascadeClassifier('haarcascade/haarcascade_eye.xml')
+    if eye_cascade.empty(): raise Exception("¿Está seguro que es la ruta correcta?")
+    video = cv2.VideoCapture(0)
+    while video.isOpened():
+        ret, frame = video.read()
+        if frame is not None:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+            for (x, y, w, h) in faces:
+                # Extraer región de la cara
+                rostro = frame[y:y + h, x:x + w]
+                # Aplicar un desenfoque Gaussian
+                rostro_blur = cv2.GaussianBlur(rostro, (99, 99), 30)
+                # Reemplazar la región original con la desenfocada
+                frame[y:y + h, x:x + w] = rostro_blur
+            cv2.imshow('Video', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    video.release()
+    cv2.destroyAllWindows()
