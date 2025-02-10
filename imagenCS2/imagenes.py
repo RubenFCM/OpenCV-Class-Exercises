@@ -95,7 +95,7 @@ def gray_scale_color(ruta):
 ###########################################################################################
 def box_face_by_cordinates(ruta, coord1, coord2, color):
     # Cargar la imagen en memoria
-    imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
+    imagen = resize_image(ruta)
     box_face = cv2.rectangle(imagen, coord1, coord2, color, 5)
 
     # imagen_resized_box = cv2.resize(box_face, (800, 600))
@@ -198,7 +198,7 @@ def mirror_image(ruta):
 
 def vertical_half_mirror_image(ruta):
     # Cargar la imagen
-    imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
+    imagen = resize_image(ruta)
     # Obtener las dimensiones de la imagen original
     alto, ancho, canales = imagen.shape
 
@@ -346,7 +346,7 @@ def save_html(html, filename):
 def box_and_text_image(ruta, coord1, coord2, box_color, text):
     imagen = box_face_by_cordinates(ruta, coord1, coord2, box_color)
 
-    imagen_txt = cv2.putText(imagen, text, (coord1[0] + 10, coord2[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, box_color, 2)
+    imagen_txt = cv2.putText(imagen, text, (coord1[1]-30, coord2[0]+90), cv2.FONT_HERSHEY_SIMPLEX, 2, box_color, 2)
 
     # cv2.imshow('Imagen con cuadrado y texto.', imagen_txt)
 
