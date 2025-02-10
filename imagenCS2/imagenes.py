@@ -164,6 +164,7 @@ def resize_image(ruta):
     image_resized = imagen[0:alto, 0:ancho]
 
     save_image(ruta, '_resized', image_resized)
+    return image_resized
 
 
 ###########################################################################################
@@ -219,8 +220,8 @@ def vertical_half_mirror_image(ruta):
 ###########################################################################################
 
 def horizontal_half_mirror_image(ruta):
-    # Cargar la imagen
-    imagen = cv2.imread(ruta, cv2.IMREAD_UNCHANGED)
+
+    imagen = resize_image(ruta)
     # Obtener las dimensiones de la imagen original
     alto, ancho, canales = imagen.shape
 
